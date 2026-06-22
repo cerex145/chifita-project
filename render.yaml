@@ -7,7 +7,7 @@ services:
     branch: main
     autoDeploy: true
     healthCheckPath: /health
-    buildCommand: npm ci && npm exec --workspace server -- prisma generate && npm run build --workspace server && npm run build --workspace client
+    buildCommand: npm ci --include=dev && npm exec --workspace server -- prisma generate && npm run build --workspace server && npm run build --workspace client
     startCommand: npm exec --workspace server -- prisma migrate deploy && npm run seed:admin --workspace server && node server/dist/index.js
     envVars:
       - key: NODE_ENV
