@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: chifita-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: chifita
+      POSTGRES_USER: chifita
+      POSTGRES_PASSWORD: chifita_dev_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chifita -d chifita"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: chifita-server
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    environment:
+      DATABASE_URL: postgresql://chifita:chifita_dev_password@postgres:5432/chifita?schema=public
+      PUBLIC_URL: http://localhost:4000
+      CLIENT_URL: http://localhost:5173
+    ports:
+      - "4000:4000"
+    volumes:
+      - server_uploads:/app/server/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+      args:
+        VITE_API_URL: http://localhost:4000
+    container_name: chifita-client
+    restart: unless-stopped
+    ports:
+      - "5174:80"
+    depends_on:
+      - server
+
+volumes:
+  postgres_data:
+  server_uploads:

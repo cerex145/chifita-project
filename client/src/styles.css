@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    margin: 0;
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto w-full max-w-7xl px-4;
+  }
+
+  .primary-button {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-navy-900 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-navy-700 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .secondary-button {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-navy-500 bg-white px-5 py-2.5 text-sm font-bold text-navy-900 transition hover:bg-navy-50 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .icon-button {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-full border border-navy-100 bg-white text-navy-900 transition hover:bg-navy-50;
+  }
+
+  .eyebrow {
+    @apply text-sm font-black uppercase tracking-[0.18em] text-navy-500;
+  }
+
+  .field-label {
+    @apply block text-sm font-bold text-navy-900;
+  }
+
+  .input {
+    @apply mt-2 block h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-slate-900 outline-none transition focus:border-navy-500 focus:ring-4 focus:ring-navy-50;
+  }
+
+  .alert {
+    @apply rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700;
+  }
+
+  .news-summary {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

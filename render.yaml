@@ -1,0 +1,56 @@
+services:
+  - type: web
+    name: chifacademy
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /health
+    buildCommand: npm ci && npm exec --workspace server -- prisma generate && npm run build --workspace server && npm run build --workspace client
+    startCommand: npm exec --workspace server -- prisma migrate deploy && npm run seed:admin --workspace server && node server/dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: chifacademy-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: REFRESH_TOKEN_DAYS
+        value: "30"
+      - key: CLIENT_URL
+        sync: false
+      - key: PUBLIC_URL
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: UPLOAD_DIR
+        value: server/uploads
+      - key: MAX_PDF_SIZE_MB
+        value: "20"
+      - key: NEWS_PROVIDER
+        value: bing-news
+      - key: NEWS_CRON_ENABLED
+        value: "true"
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+
+databases:
+  - name: chifacademy-db
+    databaseName: chifacademy
+    user: chifacademy
+    plan: free
+    postgresMajorVersion: "16"
+    ipAllowList: []
